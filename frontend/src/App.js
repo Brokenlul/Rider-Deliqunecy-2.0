@@ -650,7 +650,6 @@ function App() {
                         <span className="font-mono text-lily-cyan">{analysisResult.rider_id}</span>
                       </div>
                     )}
-                    </div>
                   </div>
                 </div>
               </div>
