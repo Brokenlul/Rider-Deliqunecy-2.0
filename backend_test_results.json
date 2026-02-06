@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-02-06T07:58:35.354495",
+  "total_tests": 5,
+  "passed_tests": 5,
+  "success_rate": 100.0,
+  "test_details": [
+    {
+      "test": "Health Endpoint",
+      "success": true,
+      "details": "Status: healthy"
+    },
+    {
+      "test": "Root API Endpoint",
+      "success": true,
+      "details": "Message: Lily's Score API - Bank Statement Analysis"
+    },
+    {
+      "test": "Synthetic Demo Endpoint",
+      "success": true,
+      "details": "Score: 98.0, Tier: Premium, Metrics: 5"
+    },
+    {
+      "test": "Test Cases Endpoint",
+      "success": true,
+      "details": "All 3 test cases valid"
+    },
+    {
+      "test": "Analyze Endpoint Validation",
+      "success": true,
+      "details": "Correctly rejects missing file"
+    }
+  ]
+}
