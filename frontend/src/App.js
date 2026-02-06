@@ -631,13 +631,25 @@ function App() {
                       <span className="text-gray-500">Transactions:</span>
                       <span className="font-mono text-white">{analysisResult.transactions_count}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-gray-500">Parser Confidence:</span>
-                      <span className="font-mono text-white">{(analysisResult.parser_confidence * 100).toFixed(0)}%</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-gray-500">Rider ID:</span>
-                      <span className="font-mono text-lily-cyan">{analysisResult.rider_id}</span>
+                    {analysisResult.parser_confidence !== undefined && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-500">Parser Confidence:</span>
+                        <span className="font-mono text-white">{(analysisResult.parser_confidence * 100).toFixed(0)}%</span>
+                      </div>
+                    )}
+                    {analysisResult.demo_mode && (
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-0.5 text-xs bg-lily-cyan/10 text-lily-cyan rounded border border-lily-cyan/30">
+                          Demo Mode
+                        </span>
+                      </div>
+                    )}
+                    {analysisResult.rider_id && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-500">Rider ID:</span>
+                        <span className="font-mono text-lily-cyan">{analysisResult.rider_id}</span>
+                      </div>
+                    )}
                     </div>
                   </div>
                 </div>
