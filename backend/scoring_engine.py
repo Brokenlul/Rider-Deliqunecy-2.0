@@ -199,7 +199,7 @@ def run_test_cases():
     
     test_results = []
     
-    # Test Case 1: Good rider
+    # Test Case 1: Good rider - stable income, normal expenses
     test1_txns = generate_synthetic_transactions()
     test1_metrics = compute_all_metrics(test1_txns, weekly_rent=900)
     test1_score = calculate_lily_score(test1_metrics)
@@ -210,45 +210,75 @@ def run_test_cases():
         'expected_tier': 'Premium or Standard'
     })
     
-    # Test Case 2: High gambling activity
-    test2_txns = generate_synthetic_transactions()
-    # Add gambling transactions
-    for i in range(5):
+    # Test Case 2: Heavy gambling activity - should significantly lower score
+    test2_txns = []
+    # Add basic salary
+    for month in range(3):
         test2_txns.append({
-            'date': f'2024-11-{10+i:02d}',
-            'description': 'UPI-DREAM11',
-            'debit': 1000,
+            'date': f'2024-{10+month:02d}-01',
+            'description': 'SALARY CREDIT',
+            'debit': 0,
+            'credit': 40000,
+            'balance': 20000,
+            'source_line': 'Test salary'
+        })
+    # Add heavy gambling transactions
+    for i in range(10):
+        test2_txns.append({
+            'date': f'2024-11-{5+i:02d}',
+            'description': 'UPI-DREAM11-BET',
+            'debit': 2000,
             'credit': 0,
             'balance': 5000,
             'source_line': 'Test gambling'
         })
+    # Add bounced payment
+    test2_txns.append({
+        'date': '2024-11-20',
+        'description': 'CHEQUE RETURNED INSUFFICIENT FUNDS',
+        'debit': 500,
+        'credit': 0,
+        'balance': 4500,
+        'source_line': 'Test bounce'
+    })
     test2_metrics = compute_all_metrics(test2_txns, weekly_rent=900)
     test2_score = calculate_lily_score(test2_metrics)
     test_results.append({
-        'case': 'Risky Rider - Multiple gambling transactions',
+        'case': 'Risky Rider - Heavy gambling + bounced payment',
         'score': test2_score['final_score'],
         'tier': test2_score['tier'],
-        'expected_tier': 'Lower due to gambling penalties'
+        'expected_tier': 'Standard or Watchlist (gambling penalty + negative event)'
     })
     
-    # Test Case 3: Low income, high rent
+    # Test Case 3: Low income with high rent - affordability issue
     test3_txns = []
-    for i in range(3):
+    for month in range(3):
+        # Very low, irregular income
         test3_txns.append({
-            'date': f'2024-{10+i:02d}-01',
-            'description': 'SALARY CREDIT',
+            'date': f'2024-{10+month:02d}-01',
+            'description': 'GIG PAYMENT',
             'debit': 0,
-            'credit': 15000,  # Low salary
-            'balance': 5000,
-            'source_line': 'Low salary'
+            'credit': 8000 + (month * 2000),  # Variable: 8k, 10k, 12k
+            'balance': 1000,
+            'source_line': 'Test low income'
         })
-    test3_metrics = compute_all_metrics(test3_txns, weekly_rent=2000)  # High rent
+        # Low balance transactions
+        for j in range(5):
+            test3_txns.append({
+                'date': f'2024-{10+month:02d}-{10+j:02d}',
+                'description': 'UPI EXPENSE',
+                'debit': 500,
+                'credit': 0,
+                'balance': 500,  # Very low balance
+                'source_line': 'Test low balance'
+            })
+    test3_metrics = compute_all_metrics(test3_txns, weekly_rent=3000)  # Very high rent
     test3_score = calculate_lily_score(test3_metrics)
     test_results.append({
-        'case': 'High Risk - Low income with high rent',
+        'case': 'High Risk - Low/variable income with high rent + low balance',
         'score': test3_score['final_score'],
         'tier': test3_score['tier'],
-        'expected_tier': 'Watchlist or Reject'
+        'expected_tier': 'Watchlist or Reject (affordability + liquidity issues)'
     })
     
     return test_results
