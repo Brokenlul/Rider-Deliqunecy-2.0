@@ -131,8 +131,13 @@ def run_tests() -> dict:
         print(f"  Tier: {result['tier']}")
         print(f"  Expected: {result['expected_tier']}")
     
+    print("\n" + "=" * 50)
+    print("✓ All test cases completed")
+    print("=" * 50)
+    
     return {
         "success": True,
+        "is_test_result": True,
         "test_results": results
     }
 
@@ -235,7 +240,7 @@ Examples:
     # Output
     if args.json:
         print(json.dumps(result, indent=2, default=str))
-    else:
+    elif not result.get('is_test_result'):
         print_result(result, verbose=args.verbose)
 
 
